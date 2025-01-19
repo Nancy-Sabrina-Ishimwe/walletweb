@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import easyImage from '../assets/images/easy.jpg'; 
+import { FaGoogle, FaFacebook } from 'react-icons/fa'; // Import icons
+import easyImage from '../assets/images/easy.jpg';
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -21,12 +22,19 @@ const Signup: React.FC = () => {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    
     console.log('Form data submitted:', formData);
-
-    // Navigate to a confirmation page or login after successful signup
     navigate('/login');
+  };
+
+  // Handlers for Google and Facebook auth
+  const handleGoogleAuth = () => {
+    console.log('Google auth clicked');
+    // Add your Google authentication logic here
+  };
+
+  const handleFacebookAuth = () => {
+    console.log('Facebook auth clicked');
+    // Add your Facebook authentication logic here
   };
 
   return (
@@ -49,7 +57,9 @@ const Signup: React.FC = () => {
 
         {/* Right Section */}
         <div className="w-1/2 p-10 bg-white">
-          <h2 className="text-2xl font-bold mb-4">Begin Your Journey 🎉</h2>
+          <h2 className="text-2xl font-bold mb-4 flex items-center">
+            Begin Your Journey 🎉
+          </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium">First Name</label>
@@ -102,6 +112,26 @@ const Signup: React.FC = () => {
               Register
             </button>
           </form>
+
+          {/* Social Auth Buttons */}
+          <div className="my-4">
+            <div className="text-center text-gray-600 mb-2">Or sign up with</div>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={handleGoogleAuth}
+                className="flex items-center px-4 py-2 bg-white border rounded-md shadow hover:bg-gray-100"
+              >
+                <FaGoogle className="text-[#DB4437] mr-2" /> Google
+              </button>
+              <button
+                onClick={handleFacebookAuth}
+                className="flex items-center px-4 py-2 bg-white border rounded-md shadow hover:bg-gray-100"
+              >
+                <FaFacebook className="text-[#4267B2] mr-2" /> Facebook
+              </button>
+            </div>
+          </div>
+
           <div className="mt-4 text-center">
             Returning user?{' '}
             <Link to="/login" className="text-[#8B5E3C]">
