@@ -26,15 +26,15 @@ const Signup: React.FC = () => {
     navigate('/login');
   };
 
-  // Handlers for Google and Facebook auth
+  
   const handleGoogleAuth = () => {
     console.log('Google auth clicked');
-    // Add your Google authentication logic here
+
   };
 
   const handleFacebookAuth = () => {
     console.log('Facebook auth clicked');
-    // Add your Facebook authentication logic here
+    
   };
 
   return (
