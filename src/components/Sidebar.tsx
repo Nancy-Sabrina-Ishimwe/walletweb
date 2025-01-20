@@ -1,23 +1,31 @@
-import { FaHome, FaWallet, FaChartPie, FaSignOutAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
+  const menuItems = [
+    { label: "Dashboard", icon: "🏠", path: "/" },
+    { label: "Budget Planner", icon: "📊", path: "/budget-planner" },
+    { label: "Transaction", icon: "💸", path: "/transaction" },
+    { label: "Reports", icon: "📄", path: "/reports" },
+  ];
+
   return (
-    <div className="w-64 h-screen bg-brown-700 text-white p-5">
-      <h2 className="text-2xl font-bold">Eric's Wallet</h2>
-      <nav className="mt-5">
-        <Link className="flex items-center gap-2 py-2" to="/">
-          <FaHome /> Dashboard
-        </Link>
-        <Link className="flex items-center gap-2 py-2" to="/budget">
-          <FaWallet /> Budget Planner
-        </Link>
-        <Link className="flex items-center gap-2 py-2" to="/reports">
-          <FaChartPie /> Reports
-        </Link>
-        <Link className="flex items-center gap-2 py-2 mt-10" to="/logout">
-          <FaSignOutAlt /> Sign Out
-        </Link>
+    <div className="bg-brown-700 text-white h-screen p-4 flex flex-col">
+      <div className="logo mb-6 text-center font-bold text-lg">Eric's Wallet</div>
+      <nav>
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `flex items-center p-2 rounded-lg hover:bg-brown-600 ${
+                isActive ? "bg-brown-600" : ""
+              }`
+            }
+          >
+            <span className="icon mr-2">{item.icon}</span>
+            {item.label}
+          </NavLink>
+        ))}
       </nav>
     </div>
   );

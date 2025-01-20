@@ -1,5 +1,5 @@
 import React from "react";
-import { FaMoneyBillWave, FaChartPie, FaWallet, FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaMoneyBillWave,  FaWallet, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { Bar, Doughnut } from "react-chartjs-2";
 import "chart.js/auto"; // Required for Chart.js in React
 import "../styles/dashboard.css"; // Optional if using custom styles
