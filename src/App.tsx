@@ -1,33 +1,54 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import CreateNewPassword from "./pages/CreateNewPassword";
-import VerifyCode from "./pages/VerifyCode";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyCode from "./pages/VerifyCode";
 import Dashboard from "./pages/Dashboard";
+import BudgetPlanner from "./pages/Budgetplanner";
+import TransactionPage from "./pages/Transactionpage";
+import Report from "./pages/Report";
 import Layout from "./components/Layout";
 
 const App: React.FC = () => {
-  const [isLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) setIsLoggedIn(true);
+  }, []);
+
+  const handleLogin = (token: string) => {
+    localStorage.setItem("authToken", token);
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setIsLoggedIn(false);
+  };
 
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/dashboard" />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/createnewpassword" element={<CreateNewPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/verifyCode" element={<VerifyCode />} />
+        <Route path="/verifycode" element={<VerifyCode />} />
 
-        {/* Authenticated Routes */}
+        {/* Protected Routes */}
         {isLoggedIn && (
           <Route
             path="/dashboard"
             element={
-              <Layout>
-                <Dashboard />
+              <Layout onLogout={handleLogout}>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/budget-planner" element={<BudgetPlanner />} />
+                  <Route path="/transaction" element={<TransactionPage />} />
+                  <Route path="/report" element={<Report />} />
+                </Routes>
               </Layout>
             }
           />
