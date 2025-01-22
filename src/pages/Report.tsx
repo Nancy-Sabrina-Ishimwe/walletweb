@@ -6,7 +6,7 @@ import ReportCard from '../components/Reportcard';
 const Report: React.FC = () => {
   return (
     <div className="flex">
-      <Sidebar />
+     
       <div className="flex-1">
         {/* <Header /> */}
         <main className="p-6 bg-gray-50">

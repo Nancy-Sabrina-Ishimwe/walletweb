@@ -1,6 +1,6 @@
 import React from "react";
 import CardsOverview from "../components/Cardsoverview";
-import LatestTransactions from "../components/Latesttransaction";
+import LatestTransactions from "../components/LatestTransaction";
 import WalletGraph from "../components/WalletGraph";
 import Todo from "../components/Todo";
 

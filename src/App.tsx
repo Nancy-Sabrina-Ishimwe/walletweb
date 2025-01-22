@@ -1,59 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import ResetPassword from "./pages/ResetPassword";
-import VerifyCode from "./pages/VerifyCode";
+import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import BudgetPlanner from "./pages/Budgetplanner";
-import TransactionPage from "./pages/Transactionpage";
+import TransactionPage from "./pages/TransactionPage";
 import Report from "./pages/Report";
-import Layout from "./components/Layout";
+import Login from "./pages/Login"; // Ensure you have the Login component
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) setIsLoggedIn(true);
-  }, []);
+  const isAuthenticated = !!localStorage.getItem("authToken"); // Check if token exists
 
   const handleLogin = (token: string) => {
     localStorage.setItem("authToken", token);
-    setIsLoggedIn(true);
+    window.location.href = "/"; // Redirect to dashboard after login
   };
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    setIsLoggedIn(false);
+    window.location.href = "/login"; // Redirect to login after logout
   };
 
   return (
     <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/dashboard" />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/verifycode" element={<VerifyCode />} />
+      {isAuthenticated ? (
+        <div className="flex">
+          {/* Sidebar */}
+          <Sidebar onSignOut={handleLogout} />
 
-        {/* Protected Routes */}
-        {isLoggedIn && (
-          <Route
-            path="/dashboard"
-            element={
-              <Layout onLogout={handleLogout}>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/budget-planner" element={<BudgetPlanner />} />
-                  <Route path="/transaction" element={<TransactionPage />} />
-                  <Route path="/report" element={<Report />} />
-                </Routes>
-              </Layout>
-            }
-          />
-        )}
-      </Routes>
+          {/* Main Content */}
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/budgetplanner" element={<BudgetPlanner />} />
+              <Route path="/transactionpage" element={<TransactionPage />} />
+              <Route path="/report" element={<Report />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
+        </div>
+      ) : (
+        <Routes>
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      )}
     </Router>
   );
 };

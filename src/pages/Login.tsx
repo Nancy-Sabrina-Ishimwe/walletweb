@@ -4,7 +4,13 @@ import { FaFacebook } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import easyImage from '../assets/images/easy.jpg';
 
-const Login: React.FC = () => {
+const Login: React.FC<{ onLogin: (token: string) => void }> = ({ onLogin }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = "sample-token"; // Replace with actual login logic and token retrieval
+    onLogin(token);
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="max-w-4xl w-full flex bg-white shadow-lg rounded-lg overflow-hidden">
@@ -26,21 +32,31 @@ const Login: React.FC = () => {
         {/* Right Section */}
         <div className="w-1/2 p-10 bg-white">
           <h2 className="text-2xl font-bold mb-4">Welcome Back 👋</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium">
+                Email
+              </label>
               <input
+                id="email"
+                name="email"
                 type="email"
                 placeholder="What is your e-mail?"
                 className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
+                required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium">
+                Password
+              </label>
               <input
+                id="password"
+                name="password"
                 type="password"
                 placeholder="Enter your password"
                 className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
+                required
               />
             </div>
             <div className="flex items-center justify-between mb-4">

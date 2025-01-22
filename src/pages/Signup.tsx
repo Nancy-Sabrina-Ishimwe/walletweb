@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaGoogle, FaFacebook } from 'react-icons/fa'; // Import icons
+import { FaGoogle, FaFacebook } from 'react-icons/fa'; 
 import easyImage from '../assets/images/easy.jpg';
 
 const Signup: React.FC = () => {
