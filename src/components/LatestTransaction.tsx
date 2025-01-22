@@ -1,28 +1,51 @@
 import React from "react";
 
-interface TransactionProps {
+interface Transaction {
+  id: number;
   category: string;
-  amount: string;
-  icon: string;
+  amount: number;
+  source: string;
+  date: string;
 }
 
-const Transaction: React.FC<TransactionProps> = ({ category, amount, icon }) => (
-  <div className="flex items-center justify-between p-4 bg-gray-100 rounded-md shadow">
-    <div className="flex items-center gap-4">
-      <img src={icon} alt={category} className="w-8 h-8" />
-      <span className="text-lg">{category}</span>
-    </div>
-    <span className="font-bold">${amount}</span>
-  </div>
-);
+interface LatestTransactionsProps {
+  transactions: Transaction[];
+  selectedCategory: string;
+}
 
-const LatestTransactions: React.FC = () => (
-  <div className="bg-white p-6 rounded-lg shadow-md flex flex-col gap-4">
-    <h2 className="text-xl font-bold">Latest Transaction</h2>
-    <Transaction category="Food" amount="25.00" icon="/icons/food.svg" />
-    <Transaction category="Transport" amount="25.00" icon="/icons/transport.svg" />
-    <button className="text-blue-500 mt-4">See more</button>
-  </div>
-);
+const LatestTransactions: React.FC<LatestTransactionsProps> = ({
+  transactions,
+  selectedCategory,
+}) => {
+  // Filter transactions by the selected category
+  const filteredTransactions = selectedCategory
+    ? transactions.filter((txn) => txn.category === selectedCategory)
+    : transactions;
+
+  return (
+    <div className="bg-white rounded-lg p-4 shadow-md">
+      <h2 className="text-2xl font-semibold mb-4">Latest Transactions</h2>
+      <ul>
+        {filteredTransactions.map((txn) => (
+          <li
+            key={txn.id}
+            className="flex justify-between border-b py-2 last:border-b-0"
+          >
+            <div>
+              <span className="block font-medium">{txn.category}</span>
+              <span className="text-sm text-gray-500">{txn.date}</span>
+            </div>
+            <div>
+              <span className="font-semibold">
+                ${txn.amount.toFixed(2)}
+              </span>
+              <span className="block text-sm text-gray-500">{txn.source}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default LatestTransactions;
