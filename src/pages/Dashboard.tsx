@@ -9,7 +9,20 @@ import ProgressChart from "../components/ProgressChart";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
-  const [chartData] = useState<any>({
+  const [balances, setBalances] = useState({
+    cash: 500,
+    mobileMoney: 1000,
+    savings: 2000,
+  });
+
+  const handleAddMoney = (type: "cash" | "mobileMoney" | "savings", amount: number) => {
+    setBalances((prevBalances) => ({
+      ...prevBalances,
+      [type]: prevBalances[type] + amount,
+    }));
+  };
+
+  const chartData = {
     labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
     datasets: [
       {
@@ -33,7 +46,7 @@ const Dashboard = () => {
         backgroundColor: "#F9623E",
       },
     ],
-  });
+  };
 
   const doughnutData = {
     labels: ["Income", "Expenses", "Savings", "Credits"],
@@ -57,9 +70,29 @@ const Dashboard = () => {
 
         {/* Cards Section */}
         <div className="grid grid-cols-3 gap-6 mb-8">
-          <DashboardCard title="Cash" balance={500} icon="💵" />
-          <DashboardCard title="Mobile Money" balance={1000} icon="📱" />
-          <DashboardCard title="Savings" balance={2000} icon="💰" />
+          {/* Cash Card */}
+          <DashboardCard
+            title="Cash"
+            balance={balances.cash}
+            icon="💵"
+            onAddMoney={(amount: number) => handleAddMoney("cash", amount)}
+          />
+
+          {/* Mobile Money Card */}
+          <DashboardCard
+            title="Mobile Money"
+            balance={balances.mobileMoney}
+            icon="📱"
+            onAddMoney={(amount: number) => handleAddMoney("mobileMoney", amount)}
+          />
+
+          {/* Savings Card */}
+          <DashboardCard
+            title="Savings"
+            balance={balances.savings}
+            icon="💰"
+            onAddMoney={(amount: number) => handleAddMoney("savings", amount)}
+          />
         </div>
 
         {/* Charts Section */}
