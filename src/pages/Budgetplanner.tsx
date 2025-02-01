@@ -1,180 +1,143 @@
 import React, { useState } from "react";
 
 const BudgetPlanner: React.FC = () => {
-  // State for tracking the user inputs
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [customCategory, setCustomCategory] = useState("");
-  const [moneyToUse, setMoneyToUse] = useState(0);
-  const [moneyAvailable, setMoneyAvailable] = useState(0);
-  const [date, setDate] = useState("");
-  const [categories, setCategories] = useState([
-    "Groceries",
-    "Entertainment",
-    "Bills",
-    "Savings",
-  ]);
+  const [moneyToUse, setMoneyToUse] = useState(500);
+  const [moneyUsed, setMoneyUsed] = useState(200);
+  const [budgetToDoMonth, setBudgetToDoMonth] = useState(1000);
+  const [budgetUsedMonth, setBudgetUsedMonth] = useState(300);
+  const [budgetSource, setBudgetSource] = useState("Bank Cards");
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  // Function to add a custom category
-  const handleAddCategory = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && customCategory.trim() !== "") {
-      if (!categories.includes(customCategory.trim())) {
-        setCategories([...categories, customCategory.trim()]);
+  // Balance for each budget source
+  const [balances, setBalances] = useState({
+    "Bank Cards": 1500,
+    "Mobile Money": 500,
+    "Cash in Hand": 200,
+  });
+
+  const handleAddMoney = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+    const newAmount = prompt("Enter the amount to add:");
+    if (newAmount) {
+      const amount = parseFloat(newAmount);
+      if (!isNaN(amount) && amount > 0) {
+        setter((prev) => prev + amount);
+      } else {
+        alert("Please enter a valid number.");
       }
-      setCustomCategory(""); // Clear the input field after adding
     }
   };
 
-  // Function to handle category selection
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prevSelected) => {
-      if (prevSelected.includes(category)) {
-        return prevSelected.filter((cat) => cat !== category);
-      } else {
-        return [...prevSelected, category];
+  const getDaysInMonth = (year: number, month: number) => {
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    let calendar = [];
+    let dayCounter = 1;
+
+    for (let week = 0; week < 6; week++) {
+      let weekRow = [];
+      for (let day = 0; day < 7; day++) {
+        if ((week === 0 && day < firstDay) || dayCounter > daysInMonth) {
+          weekRow.push("");
+        } else {
+          weekRow.push(dayCounter);
+          dayCounter++;
+        }
       }
-    });
+      calendar.push(weekRow);
+    }
+    return calendar;
   };
 
-  // Function to handle form submission
-  const handleSubmit = () => {
-    console.log({
-      selectedCategories,
-      moneyToUse,
-      moneyAvailable,
-      date,
-    });
+  const handleDaySelect = (day: number) => {
+    setSelectedDay(day);
   };
 
   return (
     <div className="p-6 flex flex-col gap-6">
-      {/* Add New Task */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-md shadow">
-        <button 
-          className="bg-brown-700 text-white px-4 py-2 rounded-md"
-          onClick={handleSubmit}
-        >
-          New Task +
-        </button>
-        <div className="flex items-center gap-2">
-          <label htmlFor="category" className="font-semibold">Category:</label>
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat, index) => (
-              <label key={index} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  value={cat}
-                  checked={selectedCategories.includes(cat)}
-                  onChange={() => handleCategoryChange(cat)}
-                  className="form-checkbox"
-                />
-                {cat}
-              </label>
-            ))}
-          </div>
-          <input
-            type="text"
-            placeholder="Add custom category (press Enter)"
-            className="border px-2 py-1 rounded-md"
-            value={customCategory}
-            onChange={(e) => setCustomCategory(e.target.value)}
-            onKeyDown={handleAddCategory} // Listen for Enter key
-          />
-        </div>
-      </div>
-
-      {/* Budget Input Section */}
-      <div className="flex flex-wrap gap-4">
-        <div className="flex-1 bg-white p-4 rounded-md shadow">
-          <h2 className="font-bold mb-2">Budget Details</h2>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="moneyAvailable" className="block font-semibold">Money Available:</label>
-              <input
-                type="number"
-                id="moneyAvailable"
-                value={moneyAvailable}
-                onChange={(e) => setMoneyAvailable(Number(e.target.value))}
-                className="border px-2 py-1 rounded-md w-full"
-                placeholder="$500.00"
-              />
-            </div>
-            <div>
-              <label htmlFor="moneyToUse" className="block font-semibold">Money to Use:</label>
-              <input
-                type="number"
-                id="moneyToUse"
-                value={moneyToUse}
-                onChange={(e) => setMoneyToUse(Number(e.target.value))}
-                className="border px-2 py-1 rounded-md w-full"
-                placeholder="$200.00"
-              />
-            </div>
-            <div>
-              <label htmlFor="date" className="block font-semibold">Date:</label>
-              <input
-                type="date"
-                id="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="border px-2 py-1 rounded-md w-full"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Budget To Use Section */}
-      <div className="flex flex-wrap gap-4">
-        <div className="flex-1 bg-white p-4 rounded-md shadow">
+      <button className="bg-brown-700 text-[#6E482C] px-6 py-3 rounded-md self-start">New Tasks +</button>
+      
+      <div className="flex justify-between gap-6">
+        <div className="bg-white p-4 rounded-md shadow-md w-1/2">
           <h2 className="font-bold mb-2">Budget To Use</h2>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex flex-col items-center border p-4 rounded-md shadow">
-              <span className="text-sm">Money to Use</span>
-              <span className="text-xl font-bold">${moneyToUse}</span>
+          <div className="flex justify-between">
+            <div className="bg-gray-100 p-4 rounded-md text-center w-40">
+              <p className="text-sm">Money to use</p>
+              <p className="text-xl font-bold">${moneyToUse}</p>
+              <button className="bg-[#6E482C] text-white px-3 py-1 mt-2 rounded-md" onClick={() => handleAddMoney(setMoneyToUse)}>Add Amount</button>
             </div>
-            <div className="flex flex-col items-center border p-4 rounded-md shadow">
-              <span className="text-sm">Money Available</span>
-              <span className="text-xl font-bold">${moneyAvailable}</span>
+            <div className="bg-gray-100 p-4 rounded-md text-center w-40">
+              <p className="text-sm">Money used so far</p>
+              <p className="text-xl font-bold">${moneyUsed}</p>
             </div>
           </div>
         </div>
 
-        {/* Calendar */}
-        <div className="w-64 bg-white p-4 rounded-md shadow">
+        <div className="bg-white p-4 rounded-md shadow-md w-1/2">
+          <h2 className="font-bold mb-2">Budget To Do Month</h2>
+          <div className="flex justify-between">
+            <div className="bg-gray-100 p-4 rounded-md text-center w-40">
+              <p className="text-sm">Money to use</p>
+              <p className="text-xl font-bold">${budgetToDoMonth}</p>
+              <button className="bg-[#6E482C] text-white px-3 py-1 mt-2 rounded-md" onClick={() => handleAddMoney(setBudgetToDoMonth)}>Add Amount</button>
+            </div>
+            <div className="bg-gray-100 p-4 rounded-md text-center w-40">
+              <p className="text-sm">Money used so far</p>
+              <p className="text-xl font-bold">${budgetUsedMonth}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-between gap-6">
+        <div className="bg-white p-4 rounded-md shadow-md w-1/2">
+          <h2 className="text-lg font-semibold">Category</h2>
+          <label className="block text-sm font-medium mt-4">Select Budget Source:</label>
+          <select className="bg-gray-100 border rounded-md p-2 w-full mt-1" value={budgetSource} onChange={(e) => setBudgetSource(e.target.value)}>
+            <option value="Bank Cards">Bank Cards</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Cash in Hand">Cash in Hand</option>
+          </select>
+          <p className="mt-2 text-gray-700"><strong>Selected Source:</strong> {budgetSource}</p>
+          <p className="mt-2 text-gray-700"><strong>Balance:</strong> ${balances[budgetSource]}</p>
+        </div>
+
+        <div className="bg-white p-4 rounded-md shadow-md w-1/2">
           <h2 className="font-bold mb-2">Calendar</h2>
-          <table className="table-auto w-full text-center">
+          <div className="flex justify-between mb-2">
+            <select className="bg-gray-100 border rounded-md p-2" value={selectedYear} onChange={(e) => setSelectedYear(parseInt(e.target.value))}>
+              {Array.from({ length: 11 }, (_, i) => 2020 + i).map((year) => <option key={year} value={year}>{year}</option>)}
+            </select>
+            <select className="bg-gray-100 border rounded-md p-2" value={selectedMonth} onChange={(e) => setSelectedMonth(parseInt(e.target.value))}>
+              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month, index) => <option key={month} value={index}>{month}</option>)}
+            </select>
+          </div>
+          <table className="w-full text-center">
             <thead>
-              <tr>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-                <th>Sun</th>
-              </tr>
+              <tr>{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => <th key={day} className="px-2 py-1">{day}</th>)}</tr>
             </thead>
             <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
-                <td>8</td>
-                <td>9</td>
-                <td>10</td>
-                <td>11</td>
-              </tr>
+              {getDaysInMonth(selectedYear, selectedMonth).map((week, i) => (
+                <tr key={i}>
+                  {week.map((date, j) => (
+                    <td
+                      key={j}
+                      className={`p-2 ${date ? 'cursor-pointer' : ''}`}
+                      onClick={() => date && handleDaySelect(date)}
+                    >
+                      {date}
+                    </td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
+          {selectedDay && (
+            <p className="mt-4 text-gray-700">
+              <strong>Selected Day:</strong> {selectedDay}
+            </p>
+          )}
         </div>
       </div>
     </div>
