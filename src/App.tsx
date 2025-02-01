@@ -8,6 +8,7 @@ import TransactionPage from "./pages/TransactionPage";
 import Report from "./pages/Report";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ToDo from "./pages/ToDo";
 
 const App: React.FC = () => {
   const isAuthenticated = !!localStorage.getItem("authToken"); // Check if token exists
@@ -40,6 +41,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/budgetplanner" element={<BudgetPlanner />} />
                 <Route path="/transactionpage" element={<TransactionPage />} />
+                <Route path="/todo" element={<ToDo />} />
                 <Route path="/report" element={<Report />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>

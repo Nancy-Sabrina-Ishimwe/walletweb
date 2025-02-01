@@ -19,6 +19,8 @@ const Sidebar: React.FC<{ onSignOut: () => void }> = ({ onSignOut }) => {
     { label: "Budget Planner", icon: "📊", path: "/budgetplanner" },
     { label: "Transaction", icon: "💸", path: "/transactionpage" },
     { label: "Reports", icon: "📄", path: "/report" },
+    { label: "Payment", icon: "💳", path: "/payment" }, // Payment page added
+    { label: "To-Do", icon: "✅", path: "/todo" }, // To-Do page added
   ];
 
   return (
