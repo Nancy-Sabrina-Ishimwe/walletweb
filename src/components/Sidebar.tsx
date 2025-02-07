@@ -19,8 +19,8 @@ const Sidebar: React.FC<{ onSignOut: () => void }> = ({ onSignOut }) => {
     { label: "Budget Planner", icon: "📊", path: "/budgetplanner" },
     { label: "Transaction", icon: "💸", path: "/transactionpage" },
     { label: "Reports", icon: "📄", path: "/report" },
-    { label: "Payment", icon: "💳", path: "/payment" }, // Payment page added
-    { label: "To-Do", icon: "✅", path: "/todo" }, // To-Do page added
+    { label: "Payment", icon: "💳", path: "/payment" }, 
+    { label: "To-Do", icon: "✅", path: "/todo" },
   ];
 
   return (
@@ -38,7 +38,7 @@ const Sidebar: React.FC<{ onSignOut: () => void }> = ({ onSignOut }) => {
               to={item.path}
               className={({ isActive }) =>
                 `flex items-center p-2 rounded-lg hover:bg-[#6E482C] ${
-                  isActive ? "bg-[#6E482C]" : ""
+                  isActive ? "bg-[#6E482C] font-bold" : ""
                 }`
               }
             >

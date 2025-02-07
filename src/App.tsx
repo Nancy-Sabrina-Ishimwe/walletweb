@@ -1,11 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar"; // Import the Navbar component
+import Navbar from "./components/Navbar"; 
 import Dashboard from "./pages/Dashboard";
 import BudgetPlanner from "./pages/Budgetplanner";
 import TransactionPage from "./pages/TransactionPage";
 import Report from "./pages/Report";
+import PaymentPage from "./pages/PaymentPage"; 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ToDo from "./pages/ToDo";
@@ -32,7 +33,7 @@ const App: React.FC = () => {
       {isAuthenticated ? (
         <div className="flex flex-col min-h-screen">
           {/* Navbar */}
-          <Navbar  />
+          <Navbar />
 
           {/* Sidebar and Main Content */}
           <div className="flex flex-1">
@@ -47,10 +48,11 @@ const App: React.FC = () => {
                 <Route path="/transactionpage" element={<TransactionPage />} />
                 <Route path="/todo" element={<ToDo />} />
                 <Route path="/report" element={<Report />} />
+                <Route path="/payment" element={<PaymentPage />} /> 
                 <Route path="/add-debit-credit-card" element={<AddDebitCreditCard onClose={() => window.history.back()} onCardScanned={() => {}} />} />
                 <Route path="/enter-the-code-manually" element={<EnterTheCodeManually />} />
                 <Route path="/money-in-hand" element={<MoneyInHand initialAmount={100} />} />
-                <Route path="/mobile-money" element={<MobileMoney />} /> {/* Added Mobile Money Route */}
+                <Route path="/mobile-money" element={<MobileMoney />} /> 
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </div>
