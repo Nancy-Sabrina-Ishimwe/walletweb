@@ -9,6 +9,10 @@ import Report from "./pages/Report";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ToDo from "./pages/ToDo";
+import AddDebitCreditCard from "./components/AddDebitCreditCard";
+import EnterTheCodeManually from "./components/EnterTheCodeManually";
+import MoneyInHand from "./components/MoneyInHands";
+import MobileMoney from "./components/MobileMoney";
 
 const App: React.FC = () => {
   const isAuthenticated = !!localStorage.getItem("authToken"); // Check if token exists
@@ -43,6 +47,10 @@ const App: React.FC = () => {
                 <Route path="/transactionpage" element={<TransactionPage />} />
                 <Route path="/todo" element={<ToDo />} />
                 <Route path="/report" element={<Report />} />
+                <Route path="/add-debit-credit-card" element={<AddDebitCreditCard onClose={() => window.history.back()} onCardScanned={() => {}} />} />
+                <Route path="/enter-the-code-manually" element={<EnterTheCodeManually />} />
+                <Route path="/money-in-hand" element={<MoneyInHand initialAmount={100} />} />
+                <Route path="/mobile-money" element={<MobileMoney />} /> {/* Added Mobile Money Route */}
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </div>
