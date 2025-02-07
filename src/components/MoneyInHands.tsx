@@ -36,7 +36,7 @@ const MoneyInHand: React.FC<MoneyInHandProps> = ({ initialAmount }) => {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-lg">
+    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-lg mt-20">
       {/* Header */}
       <h2 className="text-2xl font-semibold text-center">Money in Hands</h2>
       <p className="text-gray-600 text-center mb-4">Manage your cash balance</p>
